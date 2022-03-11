@@ -58,12 +58,12 @@ if __name__ == '__main__':
 			self.intro = '[!] Press help for extra shell commands'
 
 		def do_help(self, line):
-			print """
+			print('''
 	 lcd {path}					- changes the current local directory to {path}
 	 exit						- terminates the server process (and this session)
 	 describe {class}			- describes class
 	 ! {cmd}					- executes a local shell cmd
-	 """ 
+	 ''')
 
 		def do_shell(self, s):
 			os.system(s)
@@ -76,14 +76,14 @@ if __name__ == '__main__':
 				iObject, _ = self.iWbemServices.GetObject(sClass)
 				iObject.printInformation()
 				iObject.RemRelease()
-			except Exception, e:
+			except Exception as e:
 				#import traceback
 				#print traceback.print_exc()
 				logging.error(str(e))
 
 		def do_lcd(self, s):
 			if s == '':
-				print os.getcwd()
+				print(os.getcwd())
 			else:
 				os.chdir(s)
 	
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 					record = pEnum.getProperties()
 					if printHeader is True:
 						wmiClass = args.query.split('from', 1)[1].split(' ',2)[1]
-						print "CLASS: " + wmiClass
+						print('CLASS: ' + wmiClass)
 
 						first = True
 						for col in record:
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 							else:
 								first = False
 							sys.stdout.write(col)
-						print ''
+						print('')
 						printHeader = False
 					first = True
 					for key in record:
@@ -113,8 +113,8 @@ if __name__ == '__main__':
 						else:
 							first = False
 						sys.stdout.write(str(record[key]['value']))
-					print ''
-				except Exception, e:
+					print ('')
+				except Exception as e:
 					#import traceback
 					#print traceback.print_exc()
 					if str(e).find('S_FALSE') < 0:
@@ -131,7 +131,7 @@ if __name__ == '__main__':
 				self.printReply(iEnumWbemClassObject)
 				iEnumWbemClassObject.RemRelease()
 
-			except Exception, e:
+			except Exception as e:
 				logging.error(str(e))
 		 
 		def emptyline(self):
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 		dcom.disconnect()
 		exit(0)
 		
-	except Exception, e:
+	except Exception as e:
 		logging.error(str(e))
 		try:
 			dcom.disconnect()
