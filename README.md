@@ -19,6 +19,8 @@ The script is based on the example `wmiquery.py` from Alberto Solino.
 
 Please note: This is a first try, it hasn't been fully tested yet and there may be still some features missing.
 
+UPDATE: As it seems there has been already an earlier attempt of a python wmic replacement by @dlundgren, which we weren't aware of. You can find it here: https://github.com/dlundgren/py-wmi-client
+
 ## How to use
 
 * Download the `wmic.py` file
