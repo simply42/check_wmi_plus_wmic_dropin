@@ -19,6 +19,7 @@ import sys
 import os
 import logging
 import time
+import re
 
 from impacket.examples import logger
 from impacket import version
@@ -94,7 +95,7 @@ if __name__ == '__main__':
 					pEnum = iEnum.Next(0xffffffff,1)[0]
 					record = pEnum.getProperties()
 					if printHeader is True:
-						wmiClass = args.query.split('from', 1)[1].split(' ',2)[1]
+						wmiClass = re.split('from', args.query, flags=re.IGNORECASE)[1].split(' ',2)[1]
 						print('CLASS: ' + wmiClass)
 
 						first = True
