@@ -14,28 +14,25 @@
 # -- ref https://github.com/CoreSecurity/impacket/blob/master/examples/wmiquery.py
 # -- ref https://github.com/SecureAuthCorp/impacket/blob/master/LICENSE
 
+# added -A switch by maldex, 12.7.2022
+
 import argparse
 import sys
 import os
 import logging
-import time
 import re
 
-from impacket.examples import logger
-from impacket import version
 from impacket.dcerpc.v5.dtypes import NULL
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.rpcrt import RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_LEVEL_PKT_INTEGRITY, RPC_C_AUTHN_LEVEL_NONE
 
-#------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 	import cmd
 	
 	parser = argparse.ArgumentParser(add_help = True, description = "Executes WQL queries and gets object descriptions using Windows Management Instrumentation.")
-
-	parser.add_argument('-U', '--username', action='store', help='The domain, username andpassword of the remote Windows account. Example: [domain/]adminuser%password', required=True)
+	parser.add_argument('-U', '--username', action='store', help='The domain, username andpassword of the remote Windows account. Example: [domain/]adminuser%password')
+	parser.add_argument('-A', '--authentication-file', dest='authfile', help="Authentication file")
 	parser.add_argument('-v', '--verbose', action='store_true', help='Print extra debug information. Don\'t include this in your check_command definition!', default=False)
 	parser.add_argument('-n', '--namespace', action='store', help='The WMI namespace to use for the query.', default='root/cimv2')
 	parser.add_argument('host', action='store', help='The host name or logical address of the remote Windows machine. Example: //127.0.0.1');
@@ -43,12 +40,18 @@ if __name__ == '__main__':
 	
 	args = parser.parse_args()
 	host = args.host.split('//',1)[1]
-	domain = ''
-	username = args.username.partition('%')[0]
-	if "/" in args.username:
-		domain = args.username.partition('/')[0]
-		username = args.username.partition('%')[0].split('/',1)[1]
-	password = args.username.partition('%')[2]
+
+	if args.authfile is not None:
+		for line in open(args.authfile,'r').readlines():
+			if line.startswith("domain="): domain = line.split('=')[-1].strip()
+			if line.startswith("username="): username = line.split('=')[-1].strip()
+			if line.startswith("password="): password = line.split('=')[-1].strip()
+
+	elif args.user is not None:
+		domain, username, password = re.compile('(?:(?:([^/\\\\%]*)[/\\\\])?([^%]*))(?:%(.*))?').match(options.user).groups('')
+	else:
+		print("Missing user information")
+		sys.exit(1)
 
 
 	class WMIQUERY(cmd.Cmd):
