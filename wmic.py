@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # SECUREAUTH LABS. Copyright (C) 2021 SecureAuth Corporation. All rights reserved.
 # Copyright (c) WorNet AG 2022
 #
@@ -13,8 +13,6 @@
 #  Andreas Erhard (WorNet AG)
 # -- ref https://github.com/CoreSecurity/impacket/blob/master/examples/wmiquery.py
 # -- ref https://github.com/SecureAuthCorp/impacket/blob/master/LICENSE
-
-# added -A switch by maldex, 12.7.2022
 
 import argparse
 import sys
@@ -46,9 +44,8 @@ if __name__ == '__main__':
 			if line.startswith("domain="): domain = line.split('=')[-1].strip()
 			if line.startswith("username="): username = line.split('=')[-1].strip()
 			if line.startswith("password="): password = line.split('=')[-1].strip()
-
-	elif args.user is not None:
-		domain, username, password = re.compile('(?:(?:([^/\\\\%]*)[/\\\\])?([^%]*))(?:%(.*))?').match(options.user).groups('')
+	elif args.username is not None:
+		domain, username, password = re.compile('(?:(?:([^/\\\\%]*)[/\\\\])?([^%]*))(?:%(.*))?').match(args.username).groups('')
 	else:
 		print("Missing user information")
 		sys.exit(1)
