@@ -1,5 +1,7 @@
 # wmic.py drop-in replacement for check_wmi_plus.pl
 
+**UPDATE**: Please use `aiowmi` if you're searching for a more stable and daemonized `wmic` replacement: https://github.com/cesbit/aiowmi/tree/main/contrib/wmic_server
+
 As some of you may have noticed, the good old wmic command line utility on Linux does no longer meet the required security level from MS.
 
 This leads to annoying eventlog error messages:
