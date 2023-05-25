@@ -33,6 +33,8 @@ if __name__ == '__main__':
 	parser.add_argument('-A', '--authentication-file', dest='authfile', help="Authentication file")
 	parser.add_argument('-v', '--verbose', action='store_true', help='Print extra debug information. Don\'t include this in your check_command definition!', default=False)
 	parser.add_argument('-n', '--namespace', action='store', help='The WMI namespace to use for the query.', default='root/cimv2')
+	parser.add_argument('-d', '--delimiter', action='store', help='Delimiter to use in response.', default='|')
+	parser.add_argument('-o', '--option', action='store', help='Options that wmic would use, this does nothing at the moment. Argument will be ignored.', default='')
 	parser.add_argument('host', action='store', help='The host name or logical address of the remote Windows machine. Example: //127.0.0.1');
 	parser.add_argument('query', action='store', help='The wmic query string');
 	
@@ -52,9 +54,10 @@ if __name__ == '__main__':
 
 
 	class WMIQUERY(cmd.Cmd):
-		def __init__(self, iWbemServices):
+		def __init__(self, iWbemServices,delimiter):
 			cmd.Cmd.__init__(self)
 			self.iWbemServices = iWbemServices
+			self.delimiter = delimiter
 			self.prompt = 'WQL> '
 			self.intro = '[!] Press help for extra shell commands'
 
@@ -101,7 +104,7 @@ if __name__ == '__main__':
 						first = True
 						for col in record:
 							if not first:
-								sys.stdout.write('|')
+								sys.stdout.write(self.delimiter)
 							else:
 								first = False
 							sys.stdout.write(col)
@@ -110,7 +113,7 @@ if __name__ == '__main__':
 					first = True
 					for key in record:
 						if not first:
-							sys.stdout.write('|')
+							sys.stdout.write(self.delimiter)
 						else:
 							first = False
 						sys.stdout.write(str(record[key]['value']))
@@ -149,7 +152,7 @@ if __name__ == '__main__':
 		iWbemServices = iWbemLevel1Login.NTLMLogin("//./" + args.namespace, NULL, NULL)
 
 		iWbemLevel1Login.RemRelease()
-		shell = WMIQUERY(iWbemServices)
+		shell = WMIQUERY(iWbemServices,args.delimiter)
 
 		shell.onecmd(args.query)
 		iWbemServices.RemRelease()
