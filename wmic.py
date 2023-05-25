@@ -34,7 +34,7 @@ if __name__ == '__main__':
 	parser.add_argument('-v', '--verbose', action='store_true', help='Print extra debug information. Don\'t include this in your check_command definition!', default=False)
 	parser.add_argument('-n', '--namespace', action='store', help='The WMI namespace to use for the query.', default='root/cimv2')
 	parser.add_argument('-d', '--delimiter', action='store', help='Delimiter to use in response.', default='|')
-	parser.add_argument('-o', '--option', action='store', help='Options that wmic would use, this does not at the moment', default='')
+	parser.add_argument('-o', '--option', action='store', help='Options that wmic would use, this does nothing at the moment. Argument will be ignored.', default='')
 	parser.add_argument('host', action='store', help='The host name or logical address of the remote Windows machine. Example: //127.0.0.1');
 	parser.add_argument('query', action='store', help='The wmic query string');
 	
